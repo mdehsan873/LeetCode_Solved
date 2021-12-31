@@ -14,33 +14,22 @@
  * }
  */
 class Solution {
-    int min;
+    private int maxDiff = Integer.MIN_VALUE;
+    
     public int maxAncestorDiff(TreeNode root) {
-        if(root==null)return 0;
-        min=Integer.MIN_VALUE;
-        Queue<TreeNode>q=new LinkedList<>();
-        q.add(root);
-        while(!q.isEmpty())
-        {
-            TreeNode temp=q.poll();
-            accentor(root,temp.val);
-            if(temp.left!=null)q.add(temp.left);
-            if(temp.right!=null)q.add(temp.right);
-        }
-        return min;    
+        dfs(root, root, root);
+        return maxDiff;
     }
     
-    boolean accentor(TreeNode root,int node)
-    {
-        if(root==null)
-            return false;
-        if(root.val==node)
-            return true;
-        if(accentor(root.left,node)||accentor(root.right,node))
-        {
-            min=Math.max(min,Math.abs(root.val-node));
-            return true;
-        }
-        return false;
+    public void dfs(TreeNode node, TreeNode maxNode, TreeNode minNode) {
+        if (node == null) return;
+        
+        if (node.val > maxNode.val) maxNode = node;
+        if (node.val < minNode.val) minNode = node;
+        
+        maxDiff = Math.max(maxDiff, Math.abs(maxNode.val - minNode.val));
+        
+        dfs(node.left, maxNode, minNode);
+        dfs(node.right, maxNode, minNode);
     }
 }
